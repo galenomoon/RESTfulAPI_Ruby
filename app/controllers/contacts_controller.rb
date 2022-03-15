@@ -6,6 +6,11 @@ class ContactsController < ApplicationController
     @contacts = Contact.all
 
     render json: @contacts
+
+    # only: [:name, :email] | Filtra dados que vierem no json (o except faz o inverso)
+    # root: true | insere raís na resposta
+    # .as_json.to_json | converte pra hash, e transforma em string para json puro
+
   end
 
   # GET /contacts/1
