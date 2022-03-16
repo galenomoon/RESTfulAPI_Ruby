@@ -1,9 +1,15 @@
 class ApplicationController < ActionController::API
 
-    before_filter :ensure_json_request
+  before_action :ensure_json_request
 
-def ensure_json_request
-    return if request.headers["Accept"] =~ /json/
-    render :nothing => true, :status => 406
-end
+    def ensure_json_request
+      unless request.headers["Accept"] =~ /json/
+        render :nothing => true, :status => 406
+      else
+        unless request.get?
+          return if request.headers["Content-Type"] =~ /json/
+          render :nothing => true, :status => 415
+      end
+    end
+  end
 end
