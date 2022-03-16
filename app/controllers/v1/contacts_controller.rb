@@ -1,13 +1,18 @@
 module V1
 
   class ContactsController < ApplicationController
+    include ErrorSerializer
     before_action :set_contact, only: [:show, :update, :destroy]
 
     # GET /contacts
     def index
-      @contacts = Contact.all.page(params[:page])
+      page_number = params[:page].try(:[], :number)
+      per_page = params[:page].try(:[], :size)
 
-      paginate json: @contacts
+      @contacts = Contact.all.page(page_number).per(per_page)
+
+      render json: @contacts
+      # paginate json: @contacts
 
       # only: [:name, :email] | Filtra dados que vierem no json (o except faz o inverso)
       # root: true | insere raís na resposta
@@ -27,7 +32,7 @@ module V1
       if @contact.save
         render json: @contact, include: [:kind, :phones, :address], status: :created, location: @contact
       else
-        render json: @contact.errors, status: :unprocessable_entity
+        render json: ErrorSerializer.serialize(@contact.errors) # @contact.errors, status: :unprocessable_entity
       end
     end
 
