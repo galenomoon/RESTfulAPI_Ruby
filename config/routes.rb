@@ -4,11 +4,16 @@ Rails.application.routes.draw do
     resource :kind, only: [:show]
     resource :kind, only: [:show], path: 'relationships/kind'
 
+    #Singular Phone
+    resource :phone, except: [:show]
+    resource :phone, except: [:show], path: 'relationships/phones'
+
+    #Plural Phone
     resource :phones, only: [:show]
     resource :phones, only: [:show], path: 'relationships/phones'
 
-    resource :address, only: [:show]
-    resource :address, only: [:show], path: 'relationships/address'
+    resource :address, only: [:show, :update, :create, :destroy]
+    resource :address, only: [:show, :update, :create, :destroy], path: 'relationships/address'
   end
 
   #RESOURCES | Cria um padrão REST de rotas
