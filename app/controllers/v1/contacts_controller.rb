@@ -5,9 +5,9 @@ module V1
 
     # GET /contacts
     def index
-      @contacts = Contact.all
+      @contacts = Contact.all.page(params[:page])
 
-      render json: @contacts
+      paginate json: @contacts
 
       # only: [:name, :email] | Filtra dados que vierem no json (o except faz o inverso)
       # root: true | insere raís na resposta
