@@ -11,7 +11,10 @@ module V1
 
       @contacts = Contact.all.page(page_number).per(per_page)
 
-      render json: @contacts
+      # Cache Control --expires_in 3.hours, public: true
+      if stale?(etag: @contacts)
+        render json: @contacts
+      end
       # paginate json: @contacts
 
       # only: [:name, :email] | Filtra dados que vierem no json (o except faz o inverso)
